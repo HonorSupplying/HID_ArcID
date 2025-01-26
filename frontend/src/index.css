@@ -1,10 +1,23 @@
 @font-face {
-    font-family: "Overpass";
-    src: local("Overpass"),
-     url("./font/Overpass-Regular.ttf") format("truetype");
-   }
-
-* {
-    font-family: "Overpass";
+  font-family: "Overpass";
+  src: local("Overpass"), url("./font/Overpass-Regular.ttf") format("truetype");
 }
 
+* {
+  font-family: "Overpass";
+}
+
+button {
+  background-color: aquamarine;
+  color: black;
+  border-radius: 1rem;
+  padding: 1rem;
+  border: none;
+  border: 1px solid gray;
+  cursor: pointer;
+  font-size: large;
+}
+
+button:active {
+  background-color: tomato;
+}
