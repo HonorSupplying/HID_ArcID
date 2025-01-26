@@ -1,0 +1,10 @@
+@font-face {
+    font-family: "Overpass";
+    src: local("Overpass"),
+     url("./font/Overpass-Regular.ttf") format("truetype");
+   }
+
+* {
+    font-family: "Overpass";
+}
+
