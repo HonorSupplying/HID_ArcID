@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../styles/Search.css";
 import axios from "axios";
+import Camera from "./Camera";
 
 const Search = () => {
   var stream;
@@ -62,33 +63,7 @@ const Search = () => {
   };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>Police Camera</h1>
-      <video
-        className="stream"
-        ref={videoRef}
-        style={{ width: "50%", margin: "20px 0", transform: "scaleX(-1)" }}
-      />
-      <br />
-      <button onClick={startCamera}>Start Camera</button>
-      <button onClick={captureImage} style={{ marginLeft: "10px" }}>
-        Capture Image
-      </button>
-      {/* <button onClick={} style={{ marginLeft: "10px" }}>Search Face</button> */}
-      <br />
-      <canvas ref={canvasRef} style={{ display: "none" }} />
-      {imageSrc && (
-        <div style={{ marginTop: "20px" }}>
-          <h3>Captured Image:</h3>
-          <img
-            className="stream"
-            src={imageSrc}
-            alt="Captured"
-            style={{ width: "50%" }}
-          />
-        </div>
-      )}
-    </div>
+    <Camera/>
   );
 };
 

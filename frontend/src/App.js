@@ -5,6 +5,7 @@ import Home from "./components/Home";
 import Navbar from "./components/Navbar";
 import Search from "./components/Search";
 import Add from "./components/Add";
+import Match from "./components/Match";
 
 
 const App = () => {
@@ -14,6 +15,7 @@ const App = () => {
     <Routes>
       <Route path="/" element={<Home/>}/>
       <Route path="/add" element={<Add/>}/>
+      <Route path="/match" element={<Match/>}/>
       <Route path="/search" element={<Search/>}/>
     </Routes>
     </BrowserRouter>
