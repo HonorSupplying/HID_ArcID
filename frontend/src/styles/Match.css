@@ -1,0 +1,46 @@
+.match-container {
+  text-align: center;
+  padding: 30px;
+  display: flex; /* Ensure it uses flexbox to align children properly */
+  flex-direction: column; /* Stack the button and drag-and-drop area */
+  gap: 30px; /* Ensure there is a consistent gap between the button and drag-and-drop area */
+}
+
+.file-inputs {
+  margin-bottom: 15px; 
+}
+
+.file-inputs label {
+  display: block;
+  margin-bottom: 15px; 
+}
+
+.match-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  cursor: pointer;
+  border-radius: 13px;
+  transition: background-color 0.3s;
+  display: block; /* Forces button to behave like a block element */
+  margin: 0 auto; /* Centers the button horizontally */
+}
+
+.match-button:hover {
+  background-color: #0056b3;
+}
+
+.match-button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.match-result {
+  margin-top: 30px;
+}
+
+.error-message {
+  color: red;
+  margin-top: 15px;
+}

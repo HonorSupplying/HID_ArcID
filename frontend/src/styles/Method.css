@@ -1,0 +1,42 @@
+/* Method.css */
+
+/* Flex container for buttons */
+.method {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 20px;
+}
+
+/* Individual method buttons */
+.method-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect for method buttons */
+.method-button:hover {
+  background-color: #0056b3;
+}
+
+/* Image within method buttons */
+.method-button-image {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+/* Container for File/Camera components */
+.home {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}

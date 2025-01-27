@@ -1,0 +1,118 @@
+/* Global styles for the container and background */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f3f4f6;
+    color: #4b5563;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #ffffff, #ffffff);
+  }
+  
+  /* Styling the form container */
+  form {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    max-width: 400px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Form title styling */
+  h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #2d3748;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  
+  /* Input field styling */
+  input[type="text"],
+  textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #4b5563;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+  }
+  
+  /* Input focus styling */
+  input[type="text"]:focus,
+  textarea:focus {
+    border-color: #3b82f6;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+  }
+  
+  /* Submit button styling */
+  button {
+    width: 100%;
+    padding: 12px;
+    background-color: #3b82f6;
+    color: #ffffff;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border: none;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  button:disabled {
+    background-color: #0056b3;
+    cursor: not-allowed;
+  }
+  
+  /* Response message styling */
+  p {
+    font-size: 14px;
+    color: #6b7280;
+    text-align: center;
+    margin-top: 16px;
+  }
+  
+  /* Error message styling */
+  p.text-sm {
+    color: #ef4444;
+    font-size: 14px;
+    margin-top: 8px;
+  }
+  
+  label {
+    font-size: 14px;
+    color: #6b7280;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  /* Optional class for input placeholder */
+  input::placeholder,
+  textarea::placeholder {
+    color: #9ca3af;
+  }
+  
+  /* Padding around the form */
+  form {
+    padding: 2rem;
+  }
+  
+  /* Apply box shadow to form for cleaner look */
+  form {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }

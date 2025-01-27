@@ -1,0 +1,24 @@
+/* MethodButton.css */
+
+.method-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 3rem;
+    width: 15rem;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .method-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .method-button .method-button-icon {
+    margin-right: 8px;
+    font-size: 20px; /* Adjust icon size */
+  }
