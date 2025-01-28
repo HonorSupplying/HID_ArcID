@@ -57,11 +57,13 @@ const AddUser = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:443/api/v1/users",
+        "https://127.0.0.1:443/api/v1/users",
         payload,
         {
           headers: {
             "Content-Type": "application/json",
+            "X-Api-Key": "hid-arciid",
+          
           },
         }
       );

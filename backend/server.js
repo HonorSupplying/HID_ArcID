@@ -27,6 +27,6 @@ app.post("/api/v1/users", (req, res) => {
 });
 
 // Start the server on port 3001 (HTTP)
-app.listen(3001, () => {
-  console.log("Backend running on http://127.0.0.1:3001");
+app.listen(3000, () => {
+  console.log("Backend running on http://127.0.0.1:3000");
 });
