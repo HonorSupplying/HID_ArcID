@@ -41,15 +41,15 @@ const Match = () => {
     setError(null);
 
     const payload = {
-      gallery: {
-        modality: "face",
-        datatype: "hftemplate",
-        data: galleryImage, // Base64 image data for gallery
+      "gallery": {
+        "modality": "face",
+        "datatype": "png",
+        "data": galleryImage, // Base64 image data for gallery
       },
-      probe: {
-        modality: "face",
-        datatype: "hftemplate",
-        data: probeImage, // Base64 image data for probe
+      "probe": {
+        "modality": "face",
+        "datatype": "png",
+        "data": probeImage, // Base64 image data for probe
       },
     };
 
