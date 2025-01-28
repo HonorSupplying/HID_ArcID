@@ -6,12 +6,13 @@ const Home = () => {
     const handleClick = async () => {
         const res = await axios.get("https://192.168.30.138:443/api/v1/info",{
             headers:{
-                "Content-Type":"application/json",
-                "X-API-KEY":"hid_arcid"
+                "Content-Type": "application/json",
+                "x-api-key" : "hid_arcid",
+                "Accept" : "application/json"
             }
         })
 
-        console.log(res)
+        console.log(res.data)
 
     }
     return (

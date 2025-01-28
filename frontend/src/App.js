@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Search from "./components/Search";
 import Add from "./components/Add";
 import Match from "./components/Match";
+import Dashboard from "./components/Dashboard";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/add" element={<Add />} />
         <Route path="/match" element={<Match />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/dashboard" element={<Dashboard/>}/>
       </Routes>
     </BrowserRouter>
   );
