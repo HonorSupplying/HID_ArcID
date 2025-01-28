@@ -44,12 +44,12 @@ const Match = () => {
       "gallery": {
         "modality": "face",
         "datatype": "png",
-        "data": galleryImage, // Base64 image data for gallery
+        "data": "data:image/png;base64," + galleryImage, // Base64 image data for gallery
       },
       "probe": {
         "modality": "face",
         "datatype": "png",
-        "data": probeImage, // Base64 image data for probe
+        "data": "data:image/png;base64," + probeImage, // Base64 image data for probe
       },
     };
 
@@ -66,6 +66,8 @@ const Match = () => {
         }
       );
 
+      console.log(res);
+      
       const { error_code, error_message, match, match_confidence } =
         response.data;
 
