@@ -9,6 +9,8 @@ const Match = () => {
   const [error, setError] = useState(null);
   const [galleryImage, setGalleryImage] = useState(null);
   const [probeImage, setProbeImage] = useState(null);
+  // const [baseImage1,setBaseImage1] = useState("");
+  // const [baseImage2,setBaseImage2] = useState("");
 
   // Handle the file selection (drag and drop)
   const onDrop = (acceptedFiles, imageType) => {
@@ -18,6 +20,7 @@ const Match = () => {
       reader.onloadend = () => {
         const base64data = reader.result.split(",")[1]; // Get base64 part of the data
         if (imageType === "gallery") {
+          console.log(base64data);
           setGalleryImage(base64data);
         } else if (imageType === "probe") {
           setProbeImage(base64data);
@@ -38,28 +41,32 @@ const Match = () => {
     setError(null);
 
     const payload = {
-      gallery: {
-        modality: "face",
-        datatype: "hftemplate",
-        data: galleryImage, // Base64 image data for gallery
+      "gallery": {
+        "modality": "face",
+        "datatype": "png",
+        "data": galleryImage, // Base64 image data for gallery
       },
-      probe: {
-        modality: "face",
-        datatype: "hftemplate",
-        data: probeImage, // Base64 image data for probe
+      "probe": {
+        "modality": "face",
+        "datatype": "png",
+        "data": probeImage, // Base64 image data for probe
       },
     };
 
     try {
       const response = await axios.post(
-        "https://127.0.0.1:443/api/v1/match",
+        "https://192.168.30.138:443/api/v1/match",
         payload,
         {
           headers: {
             "Content-Type": "application/json",
+            "x-api-key" : "hid_arcid",
+            "Accept" : "application/json"
           },
         }
       );
+
+      console.log(response.data);
 
       const { error_code, error_message, match, match_confidence } =
         response.data;
@@ -114,7 +121,7 @@ const Match = () => {
     });
 
   return (
-    <div className="match-container">
+    <div className="match-container" style={{backgroundColor:"#fff",height:"80vh"}}>
       <h1>Biometric Match</h1>
 
       <div
@@ -122,8 +129,9 @@ const Match = () => {
         style={{ display: "flex", justifyContent: "space-between" }}
       >
         <div style={{ width: "48%" }}>
-          <h3>Image 1 (Gallery)</h3>
-          <div
+          <h3>Image 1</h3>
+          
+          {galleryImage ? <img style={{height:"15rem",width: "48%",marginTop:"0.5rem"}} src={"data:image/png;base64," + galleryImage}/> : <div
             {...getRootPropsGallery()}
             className="dropzone"
             style={{
@@ -135,12 +143,14 @@ const Match = () => {
           >
             <input {...getInputPropsGallery()} />
             <p>Drag and drop the Gallery Image here or click to select it</p>
-          </div>
+          </div>}
         </div>
+        
 
         <div style={{ width: "48%" }}>
-          <h3>Image 2 (Probe)</h3>
-          <div
+          <h3>Image 2</h3>
+          
+          {probeImage ? <img style={{height:"15rem",width: "48%",marginTop:"2rem"}} src={"data:image/png;base64," + probeImage}/> :<div
             {...getRootPropsProbe()}
             className="dropzone"
             style={{
@@ -152,7 +162,8 @@ const Match = () => {
           >
             <input {...getInputPropsProbe()} />
             <p>Drag and drop the Probe Image here or click to select it</p>
-          </div>
+          </div>  }
+          
         </div>
       </div>
 

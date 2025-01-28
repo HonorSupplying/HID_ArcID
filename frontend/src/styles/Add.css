@@ -116,3 +116,50 @@ body {
   form {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
+
+  /* Styling the file input and image preview container */
+.file-preview-container {
+  display: flex; /* Use flexbox for horizontal alignment */
+  justify-content: space-between; /* Space out the elements */
+  align-items: center; /* Align vertically in the center */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Styling the choose file input */
+input[type="file"] {
+  display: none; /* Hide the default file input button */
+}
+
+.label-file {
+  background-color: #3b82f6;
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.label-file:hover {
+  background-color: #0056b3;
+}
+
+.label-file:active {
+  background-color: #003b7d;
+}
+
+.label-file span {
+  margin-left: 8px;
+}
+
+/* Styling the image preview */
+.image-preview {
+  max-width: 70px;  /* Resize the width to 70px */
+  max-height: 70px; /* Resize the height to 70px */
+  object-fit: contain; 
+  object-position: center; /* Ensure the image fits nicely without distortion */
+  border-radius: 8px;  /* Optional: round corners for aesthetics */
+}

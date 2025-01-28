@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "../styles/Add.css";
 
 const AddUser = () => {
@@ -10,6 +11,8 @@ const AddUser = () => {
   });
   const [responseMessage, setResponseMessage] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate(); // Initialize navigate
 
   // Handle input changes
   const handleChange = (e) => {
@@ -30,40 +33,27 @@ const AddUser = () => {
     }
   };
 
-  // Validate form data
-  const validateForm = () => {
-    // if (!formData.external_id) {
-    //   setResponseMessage("⚠️ Please provide a unique external ID.");
-    //   return false;
-    // }
-    // if (formData.search_tags.length === 0) {
-    //   setResponseMessage("⚠️ Please provide at least one search tag.");
-    //   return false;
-    // }
-    return true;
-  };
-
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
 
     setLoading(true);
     const payload = {
-      external_id: formData.external_id,
-      custom_content: formData.custom_content,
-      search_tags: formData.search_tags,
+      external_id: formData.external_id || null, // Send null if empty
+      custom_content: formData.custom_content || null, // Send null if empty
+      search_tags:
+        formData.search_tags.length > 0 ? formData.search_tags : null, // Send null if empty
     };
 
     try {
       const response = await axios.post(
-        "https://127.0.0.1:443/api/v1/users",
+        "https://192.168.30.138:443/api/v1/users",
         payload,
         {
           headers: {
             "Content-Type": "application/json",
             "X-Api-Key": "hid-arciid",
-          
+            Accept: "application/json",
           },
         }
       );
@@ -71,7 +61,10 @@ const AddUser = () => {
       const { error_code, error_message, user } = response.data;
 
       if (error_code === 0) {
-        setResponseMessage(`🎉 User created successfully! User ID: ${user.id}`);
+        setResponseMessage(`🎉 User created successfully! Redirecting...`);
+        setTimeout(() => {
+          navigate(`/add-photo/${user.id}`); // Navigate to Add Photo page with user ID
+        }, 1000); // Slight delay before navigating
       } else {
         setResponseMessage(`⚠️ Error: ${error_message || "Unknown error"}`);
       }
@@ -103,9 +96,8 @@ const AddUser = () => {
             name="external_id"
             value={formData.external_id}
             onChange={handleChange}
-            placeholder="Required: External ID"
+            placeholder="Optional: External ID"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            required
           />
         </div>
 
@@ -143,13 +135,18 @@ const AddUser = () => {
         <button
           type="submit"
           className="w-full bg-blue-500 text-white font-medium py-2 rounded-lg hover:bg-blue-600 transition-colors"
+          disabled={loading}
         >
           {loading ? "Creating User..." : "Create User"}
         </button>
 
         {/* Response Message */}
         {responseMessage && (
-          <p className="text-center text-sm mt-4 text-gray-700">
+          <p
+            className={`text-center text-sm mt-4 ${
+              responseMessage.includes("🎉") ? "text-green-600" : "text-red-600"
+            }`}
+          >
             {responseMessage}
           </p>
         )}

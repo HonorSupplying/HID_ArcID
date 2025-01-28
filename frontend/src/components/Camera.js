@@ -52,10 +52,11 @@ const Camera = () => {
         headers: {
           "Content-Type": "application/json",
           "X-API-Key": "hid_arcid",
+          "Accept" : "application/json"
         },
       }
     );
-    console.log(res);
+    console.log(res.data);
   };
 
   // Stop the camera
