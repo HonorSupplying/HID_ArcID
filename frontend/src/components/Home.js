@@ -8,7 +8,7 @@ const Home = () => {
     
     const handleClick = async () => {
         try{
-            const response = await axios.get("https://192.168.30.138:443/api/v1/info",{
+            const response = await axios.get("https://127.0.0.1:443/api/v1/info",{
                 headers:{
                     "Content-Type": "application/json",
                     "x-api-key" : "hid_arcid",
@@ -29,20 +29,11 @@ const Home = () => {
         <button onClick={handleClick} className="license">License Info</button>
         {res && 
         <div className="">
-            <table>
-                <th>
-                    <tr>device_id</tr>
-                    <tr>device_role</tr>
-                    <tr>device_type</tr>
-                    <tr>version</tr>
-                </th>
-                <td>
-                    <tr>res.device_id</tr>
-                    <tr>res.device_role</tr>
-                    <tr>res.device_type</tr>
-                    <tr>res.version</tr>
-                </td>
-            </table>
+            <p>Device Id : {res.device_id}</p>
+            <p>Device Role : {res.device_role}</p>
+            <p>Device Type : {res.device_type}</p>
+            <p>Vesion : {res.version}</p>
+
         </div>}
         
     </div>)

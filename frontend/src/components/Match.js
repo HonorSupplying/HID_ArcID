@@ -7,10 +7,10 @@ const Match = () => {
   const [matchResult, setMatchResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [galleryImage, setGalleryImage] = useState(null);
-  const [probeImage, setProbeImage] = useState(null);
-  // const [baseImage1,setBaseImage1] = useState("");
-  // const [baseImage2,setBaseImage2] = useState("");
+  const [galleryImage, setGalleryImage] = useState("");
+  const [probeImage, setProbeImage] = useState("");
+  let baseImage1;
+  let baseImage2;
 
   // Handle the file selection (drag and drop)
   const onDrop = (acceptedFiles, imageType) => {
@@ -20,15 +20,21 @@ const Match = () => {
       reader.onloadend = () => {
         const base64data = reader.result.split(",")[1]; // Get base64 part of the data
         if (imageType === "gallery") {
-          console.log(base64data);
-          setGalleryImage(base64data);
+          setGalleryImage(base64data)
         } else if (imageType === "probe") {
-          setProbeImage(base64data);
+          setProbeImage(base64data)
+          
         }
       };
       reader.readAsDataURL(file); // Convert image to base64
     }
   };
+
+  // Extract hftemplate from picture
+  const extractPhoto = (base64) => {
+    
+
+  }
 
   // Handle the match request
   const handleMatch = async () => {
@@ -40,69 +46,136 @@ const Match = () => {
     setLoading(true);
     setError(null);
 
-    const payload = {
-      "gallery": {
-        "modality": "face",
-        "datatype": "png",
-        "data": galleryImage, // Base64 image data for gallery
-      },
-      "probe": {
-        "modality": "face",
-        "datatype": "png",
-        "data": probeImage, // Base64 image data for probe
-      },
-    };
-
-    try {
-      const response = await axios.post(
-        "https://192.168.30.138:443/api/v1/match",
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "x-api-key" : "hid_arcid",
-            "Accept" : "application/json"
-          },
-        }
-      );
-
-      console.log(response.data);
-
-      const { error_code, error_message, match, match_confidence } =
-        response.data;
-
-      if (error_code === 0) {
-        setMatchResult({
-          match: match,
-          confidence: match_confidence,
-        });
-      } else {
-        // Handling specific error codes
-        switch (error_code) {
-          case "BIO_GENERAL":
-            setError(
-              "Error: Biometric data has different modalities and cannot be matched."
-            );
-            break;
-          case "BIO_ALGO_INCOMPATIBLE":
-            setError("Error: Biometric data is incompatible with the server.");
-            break;
-          case "NOT_IMPLEMENTED":
-            setError("Error: This functionality is not yet implemented.");
-            break;
-          case "BIO_BAD_QUALITY":
-            setError("Error: The input image quality is too low.");
-            break;
-          default:
-            setError(`Error: ${error_message || "Unknown error"}`);
-        }
+    const extractPayload1 = {
+      "purpose" : "enroll",
+      "get_quality" : [0,2],
+      "suppress_liveness" : false,
+      "biometric_data" : {
+        "modality":"face",
+        "datatype":"jpg",
+        "data":galleryImage
       }
-    } catch (err) {
-      setError("Error connecting to the server");
-      console.error(err);
-    } finally {
-      setLoading(false);
     }
+
+    const extractPayload2 = {
+      "purpose" : "enroll",
+      "get_quality" : [0,2],
+      "suppress_liveness" : false,
+      "biometric_data" : {
+        "modality":"face",
+        "datatype":"jpg",
+        "data":probeImage
+      }
+    }
+
+
+    try{
+      
+      const response = await axios.post("https://127.0.0.1/api/v1/extract",extractPayload1,{
+        headers:{
+          "Content-Type":"application/json",
+          "Accept":"application/json",
+          "x-api-key":"hid_arcid"
+        }
+      })
+
+      console.log(response.data.extracted_data.biometric_data.data)
+
+      baseImage1 = response.data.extracted_data.biometric_data.data
+
+      try{
+      
+        const response = await axios.post("https://127.0.0.1/api/v1/extract",extractPayload2,{
+          headers:{
+            "Content-Type":"application/json",
+            "Accept":"application/json",
+            "x-api-key":"hid_arcid"
+          }
+        })
+        console.log(response.data.extracted_data.biometric_data.data)
+        baseImage2 = response.data.extracted_data.biometric_data.data
+
+
+        const payload = {
+          "gallery": {
+            "modality": "face",
+            "datatype": "hftemplate",
+            "data": baseImage1, // Base64 image data for gallery
+          },
+          "probe": {
+            "modality": "face",
+            "datatype": "hftemplate",
+            "data": baseImage2, // Base64 image data for probe
+          },
+        };
+    
+        try {
+          const response = await axios.post(
+            "https://127.0.0.1:443/api/v1/match",
+            payload,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "X-Api-Key": "hid_arcid",
+                "Accept": "application/json",
+              },
+            }
+          );
+    
+          console.log(response.data);
+    
+          const { error_code, error_message, match, match_confidence } =
+            response.data;
+    
+          if (error_code === 0) {
+            setMatchResult({
+              match: match,
+              confidence: match_confidence,
+            });
+          } else {
+            // Handling specific error codes
+            switch (error_code) {
+              case "BIO_GENERAL":
+                setError(
+                  "Error: Biometric data has different modalities and cannot be matched."
+                );
+                break;
+              case "BIO_ALGO_INCOMPATIBLE":
+                setError("Error: Biometric data is incompatible with the server.");
+                break;
+              case "NOT_IMPLEMENTED":
+                setError("Error: This functionality is not yet implemented.");
+                break;
+              case "BIO_BAD_QUALITY":
+                setError("Error: The input image quality is too low.");
+                break;
+              default:
+                setError(`Error: ${error_message || "Unknown error"}`);
+            }
+          }
+        } catch (err) {
+          setError("Error connecting to the server");
+          console.error(err);
+        } finally {
+          setLoading(false);
+        }
+        
+  
+      }catch(err){
+        console.log(err)
+      }
+
+
+
+
+    }catch(err){
+      console.log(err)
+    }
+
+    
+
+
+    
   };
 
   // Use the dropzone hook for drag-and-drop file uploads
@@ -130,8 +203,7 @@ const Match = () => {
       >
         <div style={{ width: "48%" }}>
           <h3>Image 1</h3>
-          
-          {galleryImage ? <img style={{height:"15rem",width: "48%",marginTop:"0.5rem"}} src={"data:image/png;base64," + galleryImage}/> : <div
+          {galleryImage ? <img style={{height:"15rem",width: "48%",marginTop:"0.5rem"}} alt = "" src={"data:image/png;base64," + galleryImage}/> : <div
             {...getRootPropsGallery()}
             className="dropzone"
             style={{
@@ -140,6 +212,7 @@ const Match = () => {
               borderRadius: "10px",
               textAlign: "center",
             }}
+            
           >
             <input {...getInputPropsGallery()} />
             <p>Drag and drop the Gallery Image here or click to select it</p>
@@ -150,7 +223,7 @@ const Match = () => {
         <div style={{ width: "48%" }}>
           <h3>Image 2</h3>
           
-          {probeImage ? <img style={{height:"15rem",width: "48%",marginTop:"2rem"}} src={"data:image/png;base64," + probeImage}/> :<div
+          {probeImage ? <img style={{height:"15rem",width: "48%",marginTop:"2rem"}} alt = "" src={"data:image/png;base64," + probeImage}/> :<div
             {...getRootPropsProbe()}
             className="dropzone"
             style={{

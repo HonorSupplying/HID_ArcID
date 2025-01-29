@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "../styles/Add.css";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useLocation} from "react-router-dom";
 
 const AddBiometricCredential = () => {
-  const { id } = useParams(); // Extract the user ID from the URL
   const navigate = useNavigate();
+  const location = useLocation();
+  const {userId} = location.state || {};
   const [image, setImage] = useState(null); // To store the selected image file
   const [imagePreview, setImagePreview] = useState(null); // For displaying image preview
   const [responseMessage, setResponseMessage] = useState("");
@@ -44,34 +45,35 @@ const AddBiometricCredential = () => {
 
     try {
       // Convert image to Base64
-      const base64Image = await convertToBase64(image);
+      let base64Image = await convertToBase64(image);
 
+      
       // Create payload
       const payload = {
-        user_id: id,
-        get_quality: [0], // Option to always return quality score
-        suppress_liveness: false, // Configure based on requirements
-        biometric_data: {
-          modality: "face",
-          datatype: "png", // Assuming PNG format
-          data: base64Image,
+        'user_id': userId,
+        'get_quality': [0] , // Option to always return quality score
+        'suppress_liveness': false , // Configure based on requirements
+        'biometric_data': {
+          'modality': "face",
+          'datatype': "jpg", // Assuming PNG format
+          'data': base64Image,
         },
       };
 
       // Make API request
       const response = await axios.post(
-        "https://192.168.30.138:443/api/v1/credentials",
+        "https://127.0.0.1:443/api/v1/credentials",
         payload,
         {
           headers: {
             "Content-Type": "application/json",
-            "X-Api-Key": "hid-arciid",
-            Accept: "application/json",
+            "X-Api-Key": "hid_arcid",
+            "Accept": "application/json",
           },
         }
       );
 
-      const { error_code, error_message, credential } = response.data;
+      const { error_code, error_message } = response.data;
 
       if (error_code === 0) {
         setResponseMessage("🎉 Biometric credential added successfully!");
@@ -89,6 +91,17 @@ const AddBiometricCredential = () => {
     }
   };
 
+  if(!userId){
+    return(
+      <div className = "text-center">
+        <p>
+          User Id not Found!
+        </p>
+
+      </div>
+    )
+  }
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-indigo-50 to-gray-100">
       <form
@@ -97,7 +110,7 @@ const AddBiometricCredential = () => {
         encType="multipart/form-data"
       >
         <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
-          Add Biometric Credential for User #{id}
+          Add Biometric Credential for User #{userId}
         </h2>
 
         <div className="file-preview-container">
@@ -106,7 +119,7 @@ const AddBiometricCredential = () => {
             <div className="image-preview-container">
               <img
                 src={imagePreview}
-                alt="Selected Image"
+                alt=""
                 className="image-preview"
               />
             </div>

@@ -11,6 +11,7 @@ const AddUser = () => {
   });
   const [responseMessage, setResponseMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [userData] = useState(false);
 
   const navigate = useNavigate(); // Initialize navigate
 
@@ -39,38 +40,44 @@ const AddUser = () => {
 
     setLoading(true);
     const payload = {
-      external_id: formData.external_id || null, // Send null if empty
-      custom_content: formData.custom_content || null, // Send null if empty
-      search_tags:
-        formData.search_tags.length > 0 ? formData.search_tags : null, // Send null if empty
+      'external_id': formData.external_id || undefined, // Send null if empty
+      'custom_content': formData.custom_content || undefined, // Send null if empty
+      'search_tags':
+        formData.search_tags.length > 0 ? formData.search_tags : undefined, // Send null if empty
     };
 
     try {
       const response = await axios.post(
-        "https://192.168.30.138:443/api/v1/users",
+        "https://127.0.0.1:443/api/v1/users",
         payload,
         {
           headers: {
             "Content-Type": "application/json",
-            "X-Api-Key": "hid-arciid",
-            Accept: "application/json",
+            "X-Api-Key": "hid_arcid",
+            "Accept": "application/json",
           },
         }
       );
 
-      const { error_code, error_message, user } = response.data;
+      const { error_code, error_message, user} = response.data;
 
       if (error_code === 0) {
         setResponseMessage(`🎉 User created successfully! Redirecting...`);
+        const userId = user.id;
         setTimeout(() => {
-          navigate(`/add-photo/${user.id}`); // Navigate to Add Photo page with user ID
+          navigate(`/add-photo`, {state: {userId}}); // Navigate to Add Photo page with user ID
         }, 1000); // Slight delay before navigating
       } else {
         setResponseMessage(`⚠️ Error: ${error_message || "Unknown error"}`);
       }
     } catch (error) {
       setResponseMessage("⚠️ Error creating user!");
-      console.error("Error details:", error.response || error); // Log the full error response
+      if(error.response){
+        console.error("Error response:", error.response);
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+        console.error("Response header:", error.response.headers);
+      }
     } finally {
       setLoading(false);
     }
@@ -150,6 +157,14 @@ const AddUser = () => {
             {responseMessage}
           </p>
         )}
+        {/*Display User Data*/}
+        {
+          userData && (
+            <div className="user_data">
+              <pre>{JSON.stringify(userData, null, 2)}</pre>
+            </div>
+          )
+        }
       </form>
     </div>
   );
